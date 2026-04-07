@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>나의 첫 페이지 였던것</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <style>
+      body {
+        background-color: #f0f0f0;
+        font-family: sans-serif;
+        max-width: 480px;
+        margin: 40px auto;
+        padding: 20px;
+      }
+
+      h1 {
+        color: #6366f1;
+        text-align: center;
+      }
+
+      ul {
+        padding: 0;
+      }
+
+      #category-select {
+        padding: 8px 12px;
+        font-size: 14px;
+        border: 2px solid #ddd;
+        border-radius: 8px;
+      }
+
+      #priority-select {
+        padding: 8px 12px;
+        font-size: 14px;
+        border: 2px solid #ddd;
+        border-radius: 8px;
+      }
+
+      #deadline-input {
+        padding: 8px 12px;
+        font-size: 12px;
+        border: 2px solid #ddd;
+        border-radius: 8px;
+        width: 20%;
+      }
+
+      #todo-input {
+        padding: 8px 12px;
+        font-size: 16px;
+        border: 2px solid #ddd;
+        border-radius: 8px;
+        width: auto;
+        flex: 1;
+      }
+
+      #add-btn {
+        background-color: #6366f1;
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 8px;
+        font-size: 16px;
+        cursor: pointer;
+      }
+
+      .todo-item {
+        background: white;
+        padding: 12px;
+        margin: 8px 0;
+        border-radius: 8px;
+        list-style: none;
+        width: 90%;
+      }
+
+      .delete-btn {
+        background-color: white;
+        border: none;
+        font-size: 15px;
+        color: red;
+        cursor: pointer;
+      }
+
+      .completed {
+        text-decoration: line-through;
+        color: gray;
+      }
+
+      .input-row {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 8px;
+        align-items: center;
+        width: 100%;
+      }
+    </style>
+  </head>
+  
+  <body>
+    <h1>나의 투두리스트</h1>
+
+    <div class="input-row">
+      <select id="priority-select">
+      <option value="중요">중요</option>
+      <option value="쏘쏘">쏘쏘</option>
+      <option value="안중요">안중요</option>
+      </select>
+      <select id="category-select">
+        <option value="기타">기타</option>
+        <option value="업무">업무</option>
+        <option value="개인">개인</option>
+        <option value="공부">공부</option>
+      </select>
+      <input id="deadline-input" type="date">
+    </div>
+    
+    <div class="input-row">
+      <input id="todo-input" type="text" placeholder="할 일을 입력하세요">
+      <button id="add-btn">추가</button>
+    </div>
+
+    <ul id="todo-list">
+    </ul>
+
+    <script>
+      const input = document.querySelector('#todo-input')
+      const btn = document.querySelector('#add-btn')
+      const list = document.querySelector('#todo-list')
+
+      let todos = JSON.parse(localStorage.getItem('todos')) || []
+
+      function render() {
+        list.innerHTML = ''
+
+        todos.forEach(function(todo, index) {
+          list.innerHTML += `
+            <li class="todo-item ${todo.completed ? 'completed' : ''}">
+              <span>[${todo.priority}]</span>
+              <span>[${todo.category}]</span>
+              ${todo.text}
+              <span>${todo.deadline ? '(~' + todo.deadline + ')' : ''}</span>
+              <button class="delete-btn" data-index="${index}">X</button>
+            </li>
+          `
+        })
+      }
+
+      btn.addEventListener('click', function() {
+        const category = document.querySelector('#category-select').value
+        const priority = document.querySelector('#priority-select').value
+        const date = document.querySelector('#deadline-input').value
+        const text = input.value
+
+        if (text === '') return
+
+        todos.push({ text: text, completed: false,
+          category: category, priority: priority, deadline: date })
+        localStorage.setItem('todos', JSON.stringify(todos))
+        render()
+
+        input.value = ''
+      })
+
+      list.addEventListener('click', function(e) {
+        const index = e.target.dataset.index
+
+        if (e.target.classList.contains('delete-btn')) {
+          todos.splice(index, 1)
+          localStorage.setItem('todos', JSON.stringify(todos))
+          render()
+          return
+        }
+
+        if (e.target.classList.contains('todo-item')) {
+          todos[index].completed = !todos[index].completed
+          localStorage.setItem('todos', JSON.stringify(todos))
+          render()
+        }
+      })
+
+      render()
+    </script>
+  </body>
+</html>
