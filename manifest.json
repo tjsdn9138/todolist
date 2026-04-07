@@ -1,0 +1,9 @@
+{
+  "name": "나의 투두리스트",
+  "short_name": "투두리스트",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#f0f0f0",
+  "theme_color": "#6366f1",
+  "icons": []
+}
