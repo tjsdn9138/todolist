@@ -71,6 +71,14 @@
         border-radius: 8px;
         list-style: none;
         width: 90%;
+        cursor: pointer;
+        word-break: break-all;
+        display: flex;
+        align-items: center;
+      }
+
+      .todo-text {
+        flex: 1;
       }
 
       .delete-btn {
@@ -100,11 +108,6 @@
     <h1>나의 투두리스트</h1>
 
     <div class="input-row">
-      <select id="priority-select">
-      <option value="중요">중요</option>
-      <option value="쏘쏘">쏘쏘</option>
-      <option value="안중요">안중요</option>
-      </select>
       <select id="category-select">
         <option value="기타">기타</option>
         <option value="업무">업무</option>
@@ -134,11 +137,12 @@
 
         todos.forEach(function(todo, index) {
           list.innerHTML += `
-            <li class="todo-item ${todo.completed ? 'completed' : ''}">
-              <span>[${todo.priority}]</span>
-              <span>[${todo.category}]</span>
-              ${todo.text}
-              <span>${todo.deadline ? '(~' + todo.deadline + ')' : ''}</span>
+            <li class="todo-item ${todo.completed ? 'completed' : ''}" data-index="${index}">
+              <span class="todo-text">
+                <span>[${todo.category}]</span>
+                ${todo.text}
+                <span>${todo.deadline ? '(~' + todo.deadline + ')' : ''}</span>
+              </span>
               <button class="delete-btn" data-index="${index}">X</button>
             </li>
           `
@@ -147,14 +151,13 @@
 
       btn.addEventListener('click', function() {
         const category = document.querySelector('#category-select').value
-        const priority = document.querySelector('#priority-select').value
         const date = document.querySelector('#deadline-input').value
         const text = input.value
 
         if (text === '') return
 
         todos.push({ text: text, completed: false,
-          category: category, priority: priority, deadline: date })
+          category: category, deadline: date })
         localStorage.setItem('todos', JSON.stringify(todos))
         render()
 
@@ -163,6 +166,9 @@
 
       list.addEventListener('click', function(e) {
         const index = e.target.dataset.index
+        const li = e.target.closest('li')
+
+        // 디버그
 
         if (e.target.classList.contains('delete-btn')) {
           todos.splice(index, 1)
@@ -171,8 +177,8 @@
           return
         }
 
-        if (e.target.classList.contains('todo-item')) {
-          todos[index].completed = !todos[index].completed
+        if (li.classList.contains('todo-item')) {
+          todos[li.dataset.index].completed = !todos[li.dataset.index].completed
           localStorage.setItem('todos', JSON.stringify(todos))
           render()
         }
@@ -180,9 +186,9 @@
 
       render()
 
-      if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('./sw.js')
-      }
+      // if ('serviceWorker' in navigator) {
+      //   navigator.serviceWorker.register('./sw.js')
+      // }
     </script>
   </body>
 </html>
