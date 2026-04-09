@@ -1,71 +1,113 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>나의 첫 페이지 였던것</title>
+    <title>TodoList</title>
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="UTF-8">
     <link rel="manifest" href="manifest.json">
+    <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic+Coding&display=swap" rel="stylesheet">
+
     <style>
       body {
-        background-color: #f0f0f0;
-        font-family: sans-serif;
+        background-color: #0d0d0d;
+        font-family: 'Nanum Gothic Coding', monospace;
         max-width: 480px;
         margin: 40px auto;
-        padding: 20px;
+        padding: 10px 20px 20px 20px;
+        color: #00ff41;
       }
 
       h1 {
-        color: #6366f1;
+        color: #00ff41;
         text-align: center;
+        text-shadow: 0 0 10px #00ff41;
+        font-size: 48px;
+        margin-top: 10px;
+        margin-bottom: 60px;
       }
 
       ul {
         padding: 0;
       }
 
-      #category-select {
+      #category-select,
+      #deadline-input {
+        background-color: #1a1a1a;
+        color: #00ff41;
+        border: 2px solid #00ff41;
         padding: 8px 12px;
         font-size: 14px;
-        border: 2px solid #ddd;
         border-radius: 8px;
-      }
-
-      #priority-select {
-        padding: 8px 12px;
-        font-size: 14px;
-        border: 2px solid #ddd;
-        border-radius: 8px;
+        height: 38px;
+        box-sizing: border-box;
       }
 
       #deadline-input {
-        padding: 8px 12px;
         font-size: 12px;
-        border: 2px solid #ddd;
-        border-radius: 8px;
         width: 20%;
       }
 
       #todo-input {
+        background-color: #1a1a1a;
+        color: #00ff41;
+        border: 2px solid #00ff41;
         padding: 8px 12px;
         font-size: 16px;
-        border: 2px solid #ddd;
         border-radius: 8px;
         width: auto;
         flex: 1;
+        box-sizing: border-box;
+        height: 40px;
       }
 
       #add-btn {
-        background-color: #6366f1;
-        color: white;
-        border: none;
+        background-color: #00ff41;
+        color: #0d0d0d;
         padding: 8px 16px;
         border-radius: 8px;
         font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+        border: 2px solid transparent;
+        box-sizing: border-box;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      #category-filter,
+      #completed-filter {
+        background-color: #1a1a1a;
+        color: #00ff41;
+        border: 2px solid #00ff41;
+        padding: 4px 8px;
+        font-size: 13px;
+        border-radius: 8px;
+        height: 32px;
+        box-sizing: border-box;
+        font-family: 'Nanum Gothic Coding', monospace;
         cursor: pointer;
       }
 
+      #todo-count {
+        display: inline;
+        margin-left: 12px;
+        font-size: 15px;
+        color: #00cc33;
+      }
+
+      #add-btn:hover {
+        background-color: #0d0d0d;
+        color: #00ff41;
+        border: 2px solid #00ff41;
+      }
+
       .todo-item {
-        background: white;
+        background: #1a1a1a;
+        color: #00ff41;
+        border: 1px solid #00cc33;
         padding: 12px;
         margin: 8px 0;
         border-radius: 8px;
@@ -82,106 +124,276 @@
       }
 
       .delete-btn {
-        background-color: white;
+        background-color: transparent;
         border: none;
         font-size: 15px;
-        color: red;
+        color: #ff4444;
         cursor: pointer;
       }
 
-      .completed {
+      .up-btn,
+      .down-btn {
+        background-color: transparent;
+        border: 1px solid #00ff41;
+        color: #00ff41;
+        cursor: pointer;
+        padding: 2px 6px;
+        font-size: 12px;
+        border-radius: 4px;
+      }
+
+      .down-btn {
+        margin-right: 8px;
+      }
+
+      .up-btn:hover,
+      .down-btn:hover {
+        background-color: #00ff41;
+        color: #0d0d0d;
+      }
+
+      .completed .todo-text {
         text-decoration: line-through;
-        color: gray;
+        color: #1f4f1f;
+      }
+
+      .select-row {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 12px;
+        align-items: center;
+        width: 100%;
       }
 
       .input-row {
         display: flex;
         gap: 8px;
-        margin-bottom: 8px;
+        margin-bottom: 25px;
         align-items: center;
         width: 100%;
       }
+
+      .filter-row {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 16px;
+      }
     </style>
   </head>
-  
-  <body>
-    <h1>나의 투두리스트</h1>
 
-    <div class="input-row">
+  <body>
+    <h1>/* TodoList */</h1>
+
+    <div class="select-row">
       <select id="category-select">
         <option value="기타">기타</option>
-        <option value="업무">업무</option>
-        <option value="개인">개인</option>
+        <option value="숙제">숙제</option>
         <option value="공부">공부</option>
       </select>
       <input id="deadline-input" type="date">
     </div>
-    
+
     <div class="input-row">
-      <input id="todo-input" type="text" placeholder="할 일을 입력하세요">
+      <input id="todo-input" type="text" placeholder="너 또 까먹을거지">
       <button id="add-btn">추가</button>
     </div>
 
-    <ul id="todo-list">
-    </ul>
+    <div class="filter-row">
+      <select id="category-filter">
+        <option value="전체">전체</option>
+        <option value="기타">기타</option>
+        <option value="숙제">숙제</option>
+        <option value="공부">공부</option>
+      </select>
+      <select id="completed-filter">
+        <option value="전체">전체</option>
+        <option value="미완료">미완료</option>
+        <option value="완료">완료</option>
+      </select>
+      <p id="todo-count"></p>
+    </div>
+
+    <ul id="todo-list"></ul>
 
     <script>
       const input = document.querySelector('#todo-input')
       const btn = document.querySelector('#add-btn')
       const list = document.querySelector('#todo-list')
+      const count = document.querySelector('#todo-count')
+      const categoryFilter = document.querySelector('#category-filter')
+      const completedFilter = document.querySelector('#completed-filter')
 
-      let todos = JSON.parse(localStorage.getItem('todos')) || []
+      let incompletedTodos = JSON.parse(localStorage.getItem('incompletedTodos')) || []
+      let completedTodos = JSON.parse(localStorage.getItem('completedTodos')) || []
 
       function render() {
+        const category = categoryFilter.value
+        const completed = completedFilter.value
+
+        // 필터가 적용된 배열 생성
+        const filteredIncomplete = incompletedTodos
+          .map(function (todo, index) { return { ...todo, originalIndex: index } })
+          .filter(function (todo) {
+            return category === '전체' || todo.category === category
+          })
+
+        const filteredComplete = completedTodos
+          .map(function (todo, index) { return { ...todo, originalIndex: index } })
+          .filter(function (todo) {
+            return category === '전체' || todo.category === category
+          })
+
+        // 완료 필터에 따라 보여줄 목록 결정
+        let showIncomplete = completed !== '완료'
+        let showComplete = completed !== '미완료'
+
+        // 투두 갯수 갱신
+        const totalCount = showIncomplete ? filteredIncomplete.length : 0
+        count.innerHTML = "할일이 " + totalCount + "개나 남았어요"
+
+        // 투두 리스트 갱신
         list.innerHTML = ''
 
-        todos.forEach(function(todo, index) {
-          list.innerHTML += `
-            <li class="todo-item ${todo.completed ? 'completed' : ''}" data-index="${index}">
-              <span class="todo-text">
-                <span>[${todo.category}]</span>
-                ${todo.text}
-                <span>${todo.deadline ? '(~' + todo.deadline + ')' : ''}</span>
-              </span>
-              <button class="delete-btn" data-index="${index}">X</button>
-            </li>
-          `
-        })
+        // 미완료 투두
+        if (showIncomplete) {
+          filteredIncomplete.forEach(function (todo, index) {
+            list.innerHTML += `
+              <li class="todo-item" data-type="incomplete" data-index="${index}">
+                ${category === '전체' ? `
+                  <button class="up-btn" data-type="..." data-index="${index}">▲</button>
+                  <button class="down-btn" data-type="..." data-index="${index}">▼</button>
+                ` : ''}
+                <span class="todo-text">
+                  <span>[${todo.category}]</span>
+                  ${todo.text}
+                  <span>${todo.deadline ? '(~' + todo.deadline + ')' : ''}</span>
+                </span>
+                <button class="delete-btn" data-type="incomplete" data-index="${index}">X</button>
+              </li>
+            `
+          })
+        }
+
+        // 완료 투두
+        if (showComplete) {
+          filteredComplete.forEach(function (todo, index) {
+            list.innerHTML += `
+              <li class="todo-item completed" data-type="complete" data-index="${index}">
+                ${category === '전체' ? `
+                  <button class="up-btn" data-type="..." data-index="${index}">▲</button>
+                  <button class="down-btn" data-type="..." data-index="${index}">▼</button>
+                ` : ''}
+                <span class="todo-text">
+                  <span>[${todo.category}]</span>
+                  ${todo.text}
+                  <span>${todo.deadline ? '(~' + todo.deadline + ')' : ''}</span>
+                </span>
+                <button class="delete-btn" data-type="complete" data-index="${index}">X</button>
+              </li>
+            `
+          })
+        }
       }
 
-      btn.addEventListener('click', function() {
+      // 투두 추가
+      function addTodo() {
         const category = document.querySelector('#category-select').value
         const date = document.querySelector('#deadline-input').value
         const text = input.value
 
         if (text === '') return
 
-        todos.push({ text: text, completed: false,
-          category: category, deadline: date })
-        localStorage.setItem('todos', JSON.stringify(todos))
+        incompletedTodos.push({
+          text: text, category: category, deadline: date
+        })
+
+        localStorage.setItem('incompletedTodos', JSON.stringify(incompletedTodos))
         render()
 
         input.value = ''
+      }
+
+      // 추가 버튼 클릭
+      btn.addEventListener('click', function () {
+        addTodo()
       })
 
-      list.addEventListener('click', function(e) {
-        const index = e.target.dataset.index
+      // 투두 입력 시 엔터 클릭
+      input.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter') {
+          addTodo()
+        }
+      })
+
+      list.addEventListener('click', function (e) {
+        const index = parseInt(e.target.dataset.index)
+        const type = e.target.dataset.type
         const li = e.target.closest('li')
+        const liType = li ? li.dataset.type : null
+        const liIndex = li ? parseInt(li.dataset.index) : null
 
-        // 디버그
+        const targetArray = type === 'complete' ? completedTodos : incompletedTodos
 
+        // 투두 삭제
         if (e.target.classList.contains('delete-btn')) {
-          todos.splice(index, 1)
-          localStorage.setItem('todos', JSON.stringify(todos))
+          targetArray.splice(index, 1)
+
+          localStorage.setItem('incompletedTodos', JSON.stringify(incompletedTodos))
+          localStorage.setItem('completedTodos', JSON.stringify(completedTodos))
           render()
+
           return
         }
 
-        if (li.classList.contains('todo-item')) {
-          todos[li.dataset.index].completed = !todos[li.dataset.index].completed
-          localStorage.setItem('todos', JSON.stringify(todos))
+        // 투두 위로 올리기
+        if (e.target.classList.contains('up-btn')) {
+          if (index == 0) return
+            ;[targetArray[index], targetArray[index - 1]] = [targetArray[index - 1], targetArray[index]]
+
+          localStorage.setItem('incompletedTodos', JSON.stringify(incompletedTodos))
+          localStorage.setItem('completedTodos', JSON.stringify(completedTodos))
+          render()
+
+          return
+        }
+
+        // 투두 아래로 내리기
+        if (e.target.classList.contains('down-btn')) {
+          if (index == targetArray.length - 1) return
+            ;[targetArray[index], targetArray[index + 1]] = [targetArray[index + 1], targetArray[index]]
+
+          localStorage.setItem('incompletedTodos', JSON.stringify(incompletedTodos))
+          localStorage.setItem('completedTodos', JSON.stringify(completedTodos))
+          render()
+
+          return
+        }
+
+        // 투두 완료
+        if (li && li.classList.contains('todo-item')) {
+          if (liType === 'incomplete') {
+            const item = incompletedTodos.splice(liIndex, 1)[0]
+            completedTodos.push(item)
+          }
+          else {
+            const item = completedTodos.splice(liIndex, 1)[0]
+            incompletedTodos.push(item)
+          }
+          localStorage.setItem('incompletedTodos', JSON.stringify(incompletedTodos))
+          localStorage.setItem('completedTodos', JSON.stringify(completedTodos))
           render()
         }
+      })
+
+      // 카테고리 필터 변경 시 갱신
+      categoryFilter.addEventListener('change', function () {
+        render()
+      })
+
+      // 완료 필터 변경 시 갱신
+      completedFilter.addEventListener('change', function () {
+        render()
       })
 
       render()
