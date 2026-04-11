@@ -233,13 +233,11 @@
 
         // 필터가 적용된 배열 생성
         const filteredIncomplete = incompletedTodos
-          .map(function (todo, index) { return { ...todo, originalIndex: index } })
           .filter(function (todo) {
             return category === '전체' || todo.category === category
           })
 
         const filteredComplete = completedTodos
-          .map(function (todo, index) { return { ...todo, originalIndex: index } })
           .filter(function (todo) {
             return category === '전체' || todo.category === category
           })
@@ -261,8 +259,8 @@
             list.innerHTML += `
               <li class="todo-item" data-type="incomplete" data-index="${index}">
                 ${category === '전체' ? `
-                  <button class="up-btn" data-type="..." data-index="${index}">▲</button>
-                  <button class="down-btn" data-type="..." data-index="${index}">▼</button>
+                  <button class="up-btn" data-type="incomplete" data-index="${index}">▲</button>
+                  <button class="down-btn" data-type="incomplete" data-index="${index}">▼</button>
                 ` : ''}
                 <span class="todo-text">
                   <span>[${todo.category}]</span>
@@ -281,8 +279,8 @@
             list.innerHTML += `
               <li class="todo-item completed" data-type="complete" data-index="${index}">
                 ${category === '전체' ? `
-                  <button class="up-btn" data-type="..." data-index="${index}">▲</button>
-                  <button class="down-btn" data-type="..." data-index="${index}">▼</button>
+                  <button class="up-btn" data-type="complete" data-index="${index}">▲</button>
+                  <button class="down-btn" data-type="complete" data-index="${index}">▼</button>
                 ` : ''}
                 <span class="todo-text">
                   <span>[${todo.category}]</span>

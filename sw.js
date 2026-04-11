@@ -1,4 +1,4 @@
-const CACHE_NAME = 'todolist-v0'
+const CACHE_NAME = 'todolist-v0.1'
 const FILES = [
     './',
     './index.html',
@@ -18,4 +18,18 @@ self.addEventListener('fetch', function(e) {
             return response || fetch(e.request)
         })
     )
+})
+
+self.addEventListener('activate', function(e) {
+  e.waitUntil(
+    caches.keys().then(function(keyList) {
+      return Promise.all(
+        keyList.map(function(key) {
+          if (key !== CACHE_NAME) {
+            caches.delete(key)
+          }
+        })
+      )
+    })
+  )
 })
