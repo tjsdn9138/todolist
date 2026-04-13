@@ -387,21 +387,22 @@
       }
 
       // 완료율 게이지 바
+      const BAR_LENGTH = Math.min(30, Math.floor((window.innerWidth - 200) / 14))
       const completedCount = showComplete ? filteredComplete.length : 0
       const incompletedCount = showIncomplete ? filteredIncomplete.length : 0
       const total = completedCount + incompletedCount
-      const filled = total === 0 ? 30 : Math.round((completedCount / total) * 30)
+      const filled = total === 0 ? BAR_LENGTH : Math.round((completedCount / total) * BAR_LENGTH)
 
       // 투두 완료 갯수(미완료만)
       if (incompletedCount == 0) {
-        countTimer = typeText(count, "야르야르몽~", countTimer, function() {
-          barTimer = typeText(countBar, '█'.repeat(filled) + '░'.repeat(30 - filled), barTimer, null, 20)
+        countTimer = typeText(count, "할 일이 있을까요?", countTimer, function() {
+          barTimer = typeText(countBar, '█'.repeat(filled) + '░'.repeat(BAR_LENGTH - filled), barTimer, null, 20)
         })
         countBar.innerHTML = ''
       }
       else {
-        countTimer = typeText(count, "할일이 " + incompletedCount + "개나 남았어요",countTimer, function() {
-          barTimer = typeText(countBar, '█'.repeat(filled) + '░'.repeat(30 - filled), barTimer, null, 20)
+        countTimer = typeText(count, "할 일이 " + incompletedCount + "개나 남았어요",countTimer, function() {
+          barTimer = typeText(countBar, '█'.repeat(filled) + '░'.repeat(BAR_LENGTH - filled), barTimer, null, 20)
         })
         countBar.innerHTML = ''
       }
@@ -502,7 +503,14 @@
     }
 
     // 더블 클릭 시 투두 내용 수정
+    let clickTimer = null
+
     list.addEventListener('dblclick', function(e) {
+      if (clickTimer) {
+        clearTimeout(clickTimer)
+        clickTimer = null
+      }
+
       const todoText = e.target.closest('.todo-text')
       if (!todoText) return
 
@@ -527,17 +535,15 @@
       })
 
       editInput.addEventListener('blur', function() {
-        if (isSaved == false) saveEdit(editInput, targetArray, liIndex)
+        if (isSaved === false) saveEdit(editInput, targetArray, liIndex)
       })
     })
  
     // 투두 클릭
-    let isEditing = false
     let isAnimating = false
 
     list.addEventListener('click', function (e) {
       if (isAnimating) return
-      if (isEditing) return
 
       const index = parseInt(e.target.dataset.index)
       const type = e.target.dataset.type
@@ -546,6 +552,14 @@
       const liIndex = li ? parseInt(li.dataset.index) : null
 
       const targetArray = type === 'complete' ? completedTodos : incompletedTodos
+
+      // 더블 클릭 처리
+      if (clickTimer) {
+        clearTimeout(clickTimer)
+        clickTimer = null
+
+        return
+      }
 
       // 투두 삭제
       if (e.target.classList.contains('delete-btn')) {
@@ -601,27 +615,30 @@
         return
       }
 
-      // 투두 완료
-      if (li && li.classList.contains('todo-item')) {
-        if (li.querySelector('.edit-input')) return
+      clickTimer = setTimeout(function() {
+        clickTimer = null
+        // 투두 완료
+        if (li && li.classList.contains('todo-item')) {
+          if (li.querySelector('.edit-input')) return
 
-        li.classList.add('completing')
+          li.classList.add('completing')
 
-        isAnimating = true
-        setTimeout(function() {
-          if (liType === 'incomplete') {
-            const item = incompletedTodos.splice(liIndex, 1)[0]
-            completedTodos.push(item)
-          } else {
-            const item = completedTodos.splice(liIndex, 1)[0]
-            incompletedTodos.push(item)
-          }
-          localStorage.setItem('incompletedTodos', JSON.stringify(incompletedTodos))
-          localStorage.setItem('completedTodos', JSON.stringify(completedTodos))
-          isAnimating = false
-          render()
-        }, 400)
-      }
+          isAnimating = true
+          setTimeout(function() {
+            if (liType === 'incomplete') {
+              const item = incompletedTodos.splice(liIndex, 1)[0]
+              completedTodos.push(item)
+            } else {
+              const item = completedTodos.splice(liIndex, 1)[0]
+              incompletedTodos.push(item)
+            }
+            localStorage.setItem('incompletedTodos', JSON.stringify(incompletedTodos))
+            localStorage.setItem('completedTodos', JSON.stringify(completedTodos))
+            isAnimating = false
+            render()
+          }, 400)
+        }
+      }, 250)
     })
 
     // 카테고리 필터 변경 시 갱신
