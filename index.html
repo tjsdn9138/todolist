@@ -8,6 +8,7 @@
   <meta charset="UTF-8">
   <link rel="manifest" href="manifest.json">
   <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic+Coding&display=swap" rel="stylesheet">
+  <meta name="theme-color" content="#0d0d0d">
 
   <style>
     body {
@@ -387,7 +388,7 @@
       }
 
       // 완료율 게이지 바
-      const BAR_LENGTH = Math.min(30, Math.floor((window.innerWidth - 200) / 14))
+      const BAR_LENGTH = Math.min(35, Math.floor((window.innerWidth - 250) / 14))
       const completedCount = showComplete ? filteredComplete.length : 0
       const incompletedCount = showIncomplete ? filteredIncomplete.length : 0
       const total = completedCount + incompletedCount
@@ -524,6 +525,7 @@
       todoText.innerHTML = `<input class="edit-input" value="${currentText}">`
       const editInput = todoText.querySelector('.edit-input')
       editInput.focus()
+      editInput.setSelectionRange(editInput.value.length, editInput.value.length)
 
       let isSaved = false
 

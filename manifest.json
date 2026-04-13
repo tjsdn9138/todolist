@@ -1,9 +1,9 @@
 {
-  "name": "나의 투두리스트",
-  "short_name": "투두리스트",
+  "name": "TodoList",
+  "short_name": "TodoList",
   "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#f0f0f0",
+  "background_color": "#0d0d0d",
   "theme_color": "#0d0d0d",
   "icons": [
     {
