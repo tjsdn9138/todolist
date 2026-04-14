@@ -1,669 +1,330 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <title>TodoList</title>
 
-<head>
-  <title>TodoList</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <link rel="manifest" href="manifest.json">
+    <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic+Coding&display=swap" rel="stylesheet">
+    <meta name="theme-color" content="#0d0d0d">
+    <meta http-equiv="Content-Security-Policy" 
+          content="default-src 'self'; 
+                  script-src 'self'; 
+                  style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+                  font-src https://fonts.gstatic.com;">
 
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta charset="UTF-8">
-  <link rel="manifest" href="manifest.json">
-  <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic+Coding&display=swap" rel="stylesheet">
-  <meta name="theme-color" content="#0d0d0d">
+    <style>
+      body {
+        background-color: #0d0d0d;
+        font-family: 'Nanum Gothic Coding', monospace;
+        max-width: 480px;
+        margin: 40px auto;
+        padding: 10px 20px 20px 20px;
+        color: #00ff41;
+      }
 
-  <style>
-    body {
-      background-color: #0d0d0d;
-      font-family: 'Nanum Gothic Coding', monospace;
-      max-width: 480px;
-      margin: 40px auto;
-      padding: 10px 20px 20px 20px;
-      color: #00ff41;
-    }
+      @keyframes glitch {
+        0%, 85%, 100% { text-shadow: 0 0 10px #00ff41; transform: translateX(0); }
+        88% { text-shadow: -3px 0 #ff0000, 3px 0 #0000ff; transform: translateX(-2px); }
+        92% { text-shadow: 3px 0 #ff0000, -3px 0 #0000ff; transform: translateX(2px); }
+        96% { text-shadow: 0 0 10px #00ff41; transform: translateX(0); }
+      }
 
-    @keyframes glitch {
-      0%, 85%, 100% { text-shadow: 0 0 10px #00ff41; transform: translateX(0); }
-      88% { text-shadow: -3px 0 #ff0000, 3px 0 #0000ff; transform: translateX(-2px); }
-      92% { text-shadow: 3px 0 #ff0000, -3px 0 #0000ff; transform: translateX(2px); }
-      96% { text-shadow: 0 0 10px #00ff41; transform: translateX(0); }
-    }
+      h1 {
+        color: #00ff41;
+        text-align: center;
+        text-shadow: 0 0 10px #00ff41;
+        font-size: 48px;
+        margin-top: 10px;
+        margin-bottom: 60px;
+        animation: glitch 4s infinite;
+      }
 
-    h1 {
-      color: #00ff41;
-      text-align: center;
-      text-shadow: 0 0 10px #00ff41;
-      font-size: 48px;
-      margin-top: 10px;
-      margin-bottom: 60px;
-      animation: glitch 4s infinite;
-    }
+      ul {
+        padding: 0;
+      }
 
-    ul {
-      padding: 0;
-    }
+      #category-select,
+      #deadline-input {
+        background-color: #1a1a1a;
+        color: #00ff41;
+        border: 2px solid #00ff41;
+        padding: 8px 12px;
+        font-size: 14px;
+        border-radius: 8px;
+        height: 38px;
+        box-sizing: border-box;
+      }
 
-    #category-select,
-    #deadline-input {
-      background-color: #1a1a1a;
-      color: #00ff41;
-      border: 2px solid #00ff41;
-      padding: 8px 12px;
-      font-size: 14px;
-      border-radius: 8px;
-      height: 38px;
-      box-sizing: border-box;
-    }
+      #deadline-input {
+        font-size: 12px;
+        width: 20%;
+      }
 
-    #deadline-input {
-      font-size: 12px;
-      width: 20%;
-    }
+      #todo-input {
+        background-color: #1a1a1a;
+        color: #00ff41;
+        border: 2px solid #00ff41;
+        padding: 8px 12px;
+        font-size: 16px;
+        border-radius: 8px;
+        width: auto;
+        flex: 1;
+        box-sizing: border-box;
+        height: 40px;
+      }
 
-    #todo-input {
-      background-color: #1a1a1a;
-      color: #00ff41;
-      border: 2px solid #00ff41;
-      padding: 8px 12px;
-      font-size: 16px;
-      border-radius: 8px;
-      width: auto;
-      flex: 1;
-      box-sizing: border-box;
-      height: 40px;
-    }
+      #todo-input:focus {
+        outline: none;
+        box-shadow: 0 0 10px #00ff41;
+      }
 
-    #todo-input:focus {
-      outline: none;
-      box-shadow: 0 0 10px #00ff41;
-    }
+      #add-btn {
+        background-color: #00ff41;
+        color: #0d0d0d;
+        padding: 8px 16px;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+        border: 2px solid transparent;
+        box-sizing: border-box;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s;
+      }
 
-    #add-btn {
-      background-color: #00ff41;
-      color: #0d0d0d;
-      padding: 8px 16px;
-      border-radius: 8px;
-      font-size: 16px;
-      font-weight: bold;
-      cursor: pointer;
-      border: 2px solid transparent;
-      box-sizing: border-box;
-      height: 40px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.2s;
-    }
+      #category-filter,
+      #completed-filter,
+      #date-sort {
+        background-color: #1a1a1a;
+        color: #00ff41;
+        border: 2px solid #00ff41;
+        padding: 4px 8px;
+        font-size: 13px;
+        border-radius: 8px;
+        height: 32px;
+        box-sizing: border-box;
+        font-family: 'Nanum Gothic Coding', monospace;
+        cursor: pointer;
+      }
 
-    #category-filter,
-    #completed-filter,
-    #date-sort {
-      background-color: #1a1a1a;
-      color: #00ff41;
-      border: 2px solid #00ff41;
-      padding: 4px 8px;
-      font-size: 13px;
-      border-radius: 8px;
-      height: 32px;
-      box-sizing: border-box;
-      font-family: 'Nanum Gothic Coding', monospace;
-      cursor: pointer;
-    }
+      #todo-count {
+        white-space: nowrap;
+      }
 
-    #todo-count {
-      white-space: nowrap;
-    }
+      #count-bar {
+        letter-spacing: -2px;
+      }
 
-    #count-bar {
-      letter-spacing: -2px;
-    }
+      #add-btn:hover {
+        background-color: #0d0d0d;
+        color: #00ff41;
+        border: 2px solid #00ff41;
+      }
 
-    #add-btn:hover {
-      background-color: #0d0d0d;
-      color: #00ff41;
-      border: 2px solid #00ff41;
-    }
+      .edit-input {
+        background-color: #0d0d0d;
+        color: #00ff41;
+        border: 1px solid #00ff41;
+        border-radius: 4px;
+        padding: 4px 8px;
+        font-family: 'Nanum Gothic Coding', monospace;
+        font-size: 14px;
+        width: 90%;
+        outline: none;
+        box-shadow: 0 0 8px #00ff41;
+        padding: 4px 0;
+      }
 
-    .edit-input {
-      background-color: #0d0d0d;
-      color: #00ff41;
-      border: 1px solid #00ff41;
-      border-radius: 4px;
-      padding: 4px 8px;
-      font-family: 'Nanum Gothic Coding', monospace;
-      font-size: 14px;
-      width: 90%;
-      outline: none;
-      box-shadow: 0 0 8px #00ff41;
-      padding: 4px 0;
-    }
+      .todo-item {
+        background: #1a1a1a;
+        color: #00ff41;
+        border: 1px solid #00cc33;
+        padding: 12px;
+        margin: 8px 0;
+        border-radius: 8px;
+        list-style: none;
+        width: 90%;
+        cursor: pointer;
+        word-break: break-all;
+        display: flex;
+        align-items: center;
+      }
 
-    .todo-item {
-      background: #1a1a1a;
-      color: #00ff41;
-      border: 1px solid #00cc33;
-      padding: 12px;
-      margin: 8px 0;
-      border-radius: 8px;
-      list-style: none;
-      width: 90%;
-      cursor: pointer;
-      word-break: break-all;
-      display: flex;
-      align-items: center;
-    }
+      .todo-item:hover {
+        box-shadow: 0 0 10px #00cc33;
+        transition: box-shadow 0.2s;
+      }
 
-    .todo-item:hover {
-      box-shadow: 0 0 10px #00cc33;
-      transition: box-shadow 0.2s;
-    }
+      .todo-text {
+        flex: 1;
+      }
 
-    .todo-text {
-      flex: 1;
-    }
+      .overdue .todo-text {
+        color: #ff4444;
+      }
 
-    .overdue .todo-text {
-      color: #ff4444;
-    }
+      .delete-btn {
+        background-color: transparent;
+        border: none;
+        font-size: 15px;
+        color: #ff4444;
+        cursor: pointer;
+      }
 
-    .delete-btn {
-      background-color: transparent;
-      border: none;
-      font-size: 15px;
-      color: #ff4444;
-      cursor: pointer;
-    }
+      .up-btn,
+      .down-btn {
+        background-color: transparent;
+        border: 1px solid #00ff41;
+        color: #00ff41;
+        cursor: pointer;
+        padding: 2px 6px;
+        font-size: 12px;
+        border-radius: 4px;
+      }
 
-    .up-btn,
-    .down-btn {
-      background-color: transparent;
-      border: 1px solid #00ff41;
-      color: #00ff41;
-      cursor: pointer;
-      padding: 2px 6px;
-      font-size: 12px;
-      border-radius: 4px;
-    }
+      .down-btn {
+        margin-right: 8px;
+      }
 
-    .down-btn {
-      margin-right: 8px;
-    }
+      .up-btn:hover,
+      .down-btn:hover {
+        background-color: #00ff41;
+        color: #0d0d0d;
+      }
 
-    .up-btn:hover,
-    .down-btn:hover {
-      background-color: #00ff41;
-      color: #0d0d0d;
-    }
+      .completed .todo-text {
+        text-decoration: line-through;
+        color: #1f4f1f;
+      }
 
-    .completed .todo-text {
-      text-decoration: line-through;
-      color: #1f4f1f;
-    }
+      .select-row {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 12px;
+        align-items: center;
+        width: 100%;
+      }
 
-    .select-row {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 12px;
-      align-items: center;
-      width: 100%;
-    }
+      .input-row {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 25px;
+        align-items: center;
+        width: 100%;
+      }
 
-    .input-row {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 25px;
-      align-items: center;
-      width: 100%;
-    }
+      .filter-row {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 16px;
+      }
 
-    .filter-row {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 16px;
-    }
+      .count-row {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 20px;
+        margin-bottom: 16px;
+        color: #00cc33;
+        font-size: 15px;
+      }
 
-    .count-row {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 20px;
-      margin-bottom: 16px;
-      color: #00cc33;
-      font-size: 15px;
-    }
+      @keyframes blink {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0; }
+      }
 
-    @keyframes blink {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0; }
-    }
+      .cursor {
+        animation: blink 1s step-end infinite;
+      }
 
-    .cursor {
-      animation: blink 1s step-end infinite;
-    }
+      @keyframes flash {
+        0%, 100% { box-shadow: 0 0 10px #00ff41; transform: translateX(0); }
+        30% { box-shadow: -3px 0 #ff0000, 3px 0 #0000ff; transform: translateX(-2px); }
+        60% { box-shadow: 3px 0 #ff0000, -3px 0 #0000ff; transform: translateX(2px); }
+        90% { box-shadow: 0 0 10px #00ff41; transform: translateX(0); }
+      }
 
-    @keyframes flash {
-      0%, 100% { box-shadow: 0 0 10px #00ff41; transform: translateX(0); }
-      30% { box-shadow: -3px 0 #ff0000, 3px 0 #0000ff; transform: translateX(-2px); }
-      60% { box-shadow: 3px 0 #ff0000, -3px 0 #0000ff; transform: translateX(2px); }
-      90% { box-shadow: 0 0 10px #00ff41; transform: translateX(0); }
-    }
+      .flash {
+        animation: flash 0.4s ease;
+      }
 
-    .flash {
-      animation: flash 0.4s ease;
-    }
+      @keyframes glitch-out {
+        0% { opacity: 1; transform: translateX(0); text-shadow: none; }
+        20% { text-shadow: -6px 0 #ff0000, 6px 0 #0000ff; transform: translateX(-2px); }
+        40% { text-shadow: 6px 0 #ff0000, -6px 0 #0000ff; transform: translateX(2px); opacity: 0.7; }
+        60% { text-shadow: -6px 0 #ff0000, 6px 0 #0000ff; transform: translateX(-1px); opacity: 0.4; }
+        80% { text-shadow: 6px 0 #ff0000, -6px 0 #0000ff; transform: translateX(1px); opacity: 0.2; }
+        100% { opacity: 0; transform: translateX(0); }
+      }
 
-    @keyframes glitch-out {
+      .removing {
+        animation: glitch-out 0.5s ease forwards;
+      }
+
+      @keyframes glitch-complete {
       0% { opacity: 1; transform: translateX(0); text-shadow: none; }
-      20% { text-shadow: -6px 0 #ff0000, 6px 0 #0000ff; transform: translateX(-2px); }
-      40% { text-shadow: 6px 0 #ff0000, -6px 0 #0000ff; transform: translateX(2px); opacity: 0.7; }
-      60% { text-shadow: -6px 0 #ff0000, 6px 0 #0000ff; transform: translateX(-1px); opacity: 0.4; }
-      80% { text-shadow: 6px 0 #ff0000, -6px 0 #0000ff; transform: translateX(1px); opacity: 0.2; }
-      100% { opacity: 0; transform: translateX(0); }
+      25% { text-shadow: -6px 0 #ff0000, 6px 0 #0000ff; transform: translateX(-2px); }
+      50% { text-shadow: 6px 0 #ff0000, -6px 0 #0000ff; transform: translateX(2px); }
+      75% { text-shadow: -6px 0 #ff0000, 6px 0 #0000ff; transform: translateX(-1px); }
+      100% { opacity: 1; transform: translateX(0); text-shadow: none; }
     }
 
-    .removing {
-      animation: glitch-out 0.5s ease forwards;
+    .completing {
+      animation: glitch-complete 0.4s ease forwards;
     }
-
-    @keyframes glitch-complete {
-    0% { opacity: 1; transform: translateX(0); text-shadow: none; }
-    25% { text-shadow: -6px 0 #ff0000, 6px 0 #0000ff; transform: translateX(-2px); }
-    50% { text-shadow: 6px 0 #ff0000, -6px 0 #0000ff; transform: translateX(2px); }
-    75% { text-shadow: -6px 0 #ff0000, 6px 0 #0000ff; transform: translateX(-1px); }
-    100% { opacity: 1; transform: translateX(0); text-shadow: none; }
-  }
-
-  .completing {
-    animation: glitch-complete 0.4s ease forwards;
-  }
-  </style>
-</head>
-
-<body>
-  <h1>/* TodoList */<span class="cursor">_</span></h1>
-
-  <div class="select-row">
-    <select id="category-select">
-      <option value="기타">기타</option>
-      <option value="숙제">숙제</option>
-      <option value="공부">공부</option>
-    </select>
-    <input id="deadline-input" type="date">
-  </div>
-
-  <div class="input-row">
-    <input id="todo-input" type="text" placeholder="너 또 까먹을거지">
-    <button id="add-btn">추가</button>
-  </div>
-
-  <div class="filter-row">
-    <select id="category-filter">
-      <option value="전체">전체</option>
-      <option value="기타">기타</option>
-      <option value="숙제">숙제</option>
-      <option value="공부">공부</option>
-    </select>
-    <select id="completed-filter">
-      <option value="전체">전체</option>
-      <option value="미완료">미완료</option>
-      <option value="완료">완료</option>
-    </select>
-    <select id="date-sort">
-      <option value="default">기본순</option>
-      <option value="asc">날짜 빠른순</option>
-      <option value="desc">날짜 느린순</option>
-    </select>
-  </div>
-
-  <div class="count-row">
-    <span id="todo-count"></span>
-    <span id="count-bar"></span>
-  </div>
-
-  <ul id="todo-list"></ul>
-
-  <script>
-    const input = document.querySelector('#todo-input')
-    const btn = document.querySelector('#add-btn')
-    const list = document.querySelector('#todo-list')
-    const count = document.querySelector('#todo-count')
-    const categoryFilter = document.querySelector('#category-filter')
-    const completedFilter = document.querySelector('#completed-filter')
-    const dateSort = document.querySelector('#date-sort')
-    const countBar = document.querySelector('#count-bar')
-
-    let incompletedTodos = JSON.parse(localStorage.getItem('incompletedTodos')) || []
-    let completedTodos = JSON.parse(localStorage.getItem('completedTodos')) || []
-
-    // 변경점 갱신 함수
-    let countTimer = null
-    let barTimer = null
-
-    function render() {
-      const category = categoryFilter.value
-      const completed = completedFilter.value
-      const sort = dateSort.value
-
-      // 필터가 적용된 배열 생성
-      const filteredIncomplete = incompletedTodos
-        .filter(function (todo) {
-          return category === '전체' || todo.category === category
-        })
-
-      const filteredComplete = completedTodos
-        .filter(function (todo) {
-          return category === '전체' || todo.category === category
-        })
-
-      // 날짜 정렬 적용(미완료만)
-      if (sort !== 'default') {
-        filteredIncomplete.sort(function (a, b) {
-          if (!a.deadline) return -1
-          if (!b.deadline) return 1
-          if (sort === 'asc') return a.deadline > b.deadline ? 1 : -1
-          if (sort === 'desc') return a.deadline < b.deadline ? 1 : -1
-        })
-      }
-
-      // 완료 필터에 따라 보여줄 목록 결정
-      let showIncomplete = completed !== '완료'
-      let showComplete = completed !== '미완료'
-
-      // 타이핑 애니메이션 함수
-      function typeText(element, text, timer, callback, speed = 40) {
-        if (timer) clearInterval(timer)
-
-        element.innerHTML = ''
-        let i = 0
-        timer = setInterval(function () {
-          element.innerHTML += text[i]
-          i++
-          if (i >= text.length) {
-            clearInterval(timer)
-            timer = null
-            if (callback) callback()
-          }
-        }, speed)
-
-        return timer
-      }
-
-      // 완료율 게이지 바
-      const BAR_LENGTH = Math.min(35, Math.floor((window.innerWidth - 250) / 14))
-      const completedCount = showComplete ? filteredComplete.length : 0
-      const incompletedCount = showIncomplete ? filteredIncomplete.length : 0
-      const total = completedCount + incompletedCount
-      const filled = total === 0 ? BAR_LENGTH : Math.round((completedCount / total) * BAR_LENGTH)
-
-      // 투두 완료 갯수(미완료만)
-      if (incompletedCount == 0) {
-        countTimer = typeText(count, "할 일이 있을까요?", countTimer, function() {
-          barTimer = typeText(countBar, '█'.repeat(filled) + '░'.repeat(BAR_LENGTH - filled), barTimer, null, 20)
-        })
-        countBar.innerHTML = ''
-      }
-      else {
-        countTimer = typeText(count, "할 일이 " + incompletedCount + "개나 남았어요",countTimer, function() {
-          barTimer = typeText(countBar, '█'.repeat(filled) + '░'.repeat(BAR_LENGTH - filled), barTimer, null, 20)
-        })
-        countBar.innerHTML = ''
-      }
-
-      // 투두 리스트 갱신
-      list.innerHTML = ''
-
-      // 미완료 투두      
-      if (showIncomplete) {
-        filteredIncomplete.forEach(function (todo, index) {
-          // 기간이 지난 투두 확인
-          const isOverdue = todo.deadline && todo.deadline < new Date().toISOString().slice(0, 10)
-
-          list.innerHTML += `
-              <li class="todo-item ${isOverdue ? 'overdue' : ''}" data-type="incomplete" data-index="${index}">
-                ${category === '전체' && sort === 'default' ? `
-                  <button class="up-btn" data-type="incomplete" data-index="${index}">▲</button>
-                  <button class="down-btn" data-type="incomplete" data-index="${index}">▼</button>
-                ` : ''}
-                <span class="todo-text">
-                  <span>[${todo.category}]</span>
-                  ${todo.text}
-                  <span>${todo.deadline ? '(~' + todo.deadline + ')' : ''}</span>
-                </span>
-                <button class="delete-btn" data-type="incomplete" data-index="${index}">X</button>
-              </li>
-            `
-        })
-      }
-
-      // 완료 투두
-      if (showComplete) {
-        filteredComplete.forEach(function (todo, index) {
-          list.innerHTML += `
-              <li class="todo-item completed" data-type="complete" data-index="${index}">
-                ${category === '전체' ? `
-                  <button class="up-btn" data-type="complete" data-index="${index}">▲</button>
-                  <button class="down-btn" data-type="complete" data-index="${index}">▼</button>
-                ` : ''}
-                <span class="todo-text">
-                  <span>[${todo.category}]</span>
-                  ${todo.text}
-                  <span>${todo.deadline ? '(~' + todo.deadline + ')' : ''}</span>
-                </span>
-                <button class="delete-btn" data-type="complete" data-index="${index}">X</button>
-              </li>
-            `
-        })
-      }
-    }
-
-    // 투두 추가
-    function addTodo() {
-      const category = document.querySelector('#category-select').value
-      const date = document.querySelector('#deadline-input').value
-      const text = input.value
-
-      if (text === '') return
-
-      incompletedTodos.push({
-        text: text, category: category, deadline: date
-      })
-
-      localStorage.setItem('incompletedTodos', JSON.stringify(incompletedTodos))
-      render()
-
-      // 투두 추가 시 애니메이션 효과
-      input.classList.add('flash')
-      setTimeout(function() {
-        input.classList.remove('flash')
-      }, 400)
-
-      input.value = ''
-    }
-
-    // 추가 버튼 클릭
-    btn.addEventListener('click', function () {
-      addTodo()
-    })
-
-    // 투두 입력 시 엔터 클릭
-    input.addEventListener('keydown', function (e) {
-      if (e.key === 'Enter') {
-        addTodo()
-      }
-    })
-
-    // 투두 수정 저장 함수
-    function saveEdit(editInput, targetArray, liIndex) {
-      const newText = editInput.value
-
-      if (newText === '') return
-
-      targetArray[liIndex].text = newText
-      localStorage.setItem('incompletedTodos', JSON.stringify(incompletedTodos))
-      localStorage.setItem('completedTodos', JSON.stringify(completedTodos))
-      render()
-    }
-
-    // 더블 클릭 시 투두 내용 수정
-    let clickTimer = null
-
-    list.addEventListener('dblclick', function(e) {
-      if (clickTimer) {
-        clearTimeout(clickTimer)
-        clickTimer = null
-      }
-
-      const todoText = e.target.closest('.todo-text')
-      if (!todoText) return
-
-      const li = e.target.closest('li')
-      const liType = li.dataset.type
-      const liIndex = parseInt(li.dataset.index)
-
-      const targetArray = liType === 'complete' ? completedTodos : incompletedTodos
-      const currentText = targetArray[liIndex].text
-
-      todoText.innerHTML = `<input class="edit-input" value="${currentText}">`
-      const editInput = todoText.querySelector('.edit-input')
-      editInput.focus()
-      editInput.setSelectionRange(editInput.value.length, editInput.value.length)
-
-      let isSaved = false
-
-      editInput.addEventListener('keydown', function(e) {
-        if (e.key === 'Enter') {
-          isSaved = true
-          saveEdit(editInput, targetArray, liIndex)
-        }
-      })
-
-      editInput.addEventListener('blur', function() {
-        if (isSaved === false) saveEdit(editInput, targetArray, liIndex)
-      })
-    })
- 
-    // 투두 클릭
-    let isAnimating = false
-
-    list.addEventListener('click', function (e) {
-      if (isAnimating) return
-
-      const index = parseInt(e.target.dataset.index)
-      const type = e.target.dataset.type
-      const li = e.target.closest('li')
-      const liType = li ? li.dataset.type : null
-      const liIndex = li ? parseInt(li.dataset.index) : null
-
-      const targetArray = type === 'complete' ? completedTodos : incompletedTodos
-
-      // 더블 클릭 처리
-      if (clickTimer) {
-        clearTimeout(clickTimer)
-        clickTimer = null
-
-        return
-      }
-
-      // 투두 삭제
-      if (e.target.classList.contains('delete-btn')) {
-        li.classList.add('removing')
-
-        isAnimating = true
-        setTimeout(function() {
-          targetArray.splice(index, 1)
-          localStorage.setItem('incompletedTodos', JSON.stringify(incompletedTodos))
-          localStorage.setItem('completedTodos', JSON.stringify(completedTodos))
-          isAnimating = false
-          render()
-        }, 500)
-
-        return
-      }
-
-      // 투두 위로 올리기
-      if (e.target.classList.contains('up-btn')) {
-        if (index == 0) return
-
-        li.classList.add('completing')
-
-        isAnimating = true
-        setTimeout(function() {
-          li.classList.remove('completing')
-          ;[targetArray[index], targetArray[index - 1]] = [targetArray[index - 1], targetArray[index]]
-          localStorage.setItem('incompletedTodos', JSON.stringify(incompletedTodos))
-          localStorage.setItem('completedTodos', JSON.stringify(completedTodos))
-          isAnimating = false
-          render()
-        }, 400)
-        
-        return
-      }
-
-      // 투두 아래로 내리기
-      if (e.target.classList.contains('down-btn')) {
-        if (index == targetArray.length - 1) return
-        
-        li.classList.add('completing')
-
-        isAnimating = true
-        setTimeout(function() {
-          li.classList.remove('completing')
-          ;[targetArray[index], targetArray[index + 1]] = [targetArray[index + 1], targetArray[index]]
-          localStorage.setItem('incompletedTodos', JSON.stringify(incompletedTodos))
-          localStorage.setItem('completedTodos', JSON.stringify(completedTodos))
-          isAnimating = false
-          render()
-        }, 400)
-
-        return
-      }
-
-      clickTimer = setTimeout(function() {
-        clickTimer = null
-        // 투두 완료
-        if (li && li.classList.contains('todo-item')) {
-          if (li.querySelector('.edit-input')) return
-
-          li.classList.add('completing')
-
-          isAnimating = true
-          setTimeout(function() {
-            if (liType === 'incomplete') {
-              const item = incompletedTodos.splice(liIndex, 1)[0]
-              completedTodos.push(item)
-            } else {
-              const item = completedTodos.splice(liIndex, 1)[0]
-              incompletedTodos.push(item)
-            }
-            localStorage.setItem('incompletedTodos', JSON.stringify(incompletedTodos))
-            localStorage.setItem('completedTodos', JSON.stringify(completedTodos))
-            isAnimating = false
-            render()
-          }, 400)
-        }
-      }, 250)
-    })
-
-    // 카테고리 필터 변경 시 갱신
-    categoryFilter.addEventListener('change', function () {
-      render()
-    })
-
-    // 완료 필터 변경 시 갱신
-    completedFilter.addEventListener('change', function () {
-      render()
-    })
-
-    // 날짜 정렬 변경 시 갱신
-    dateSort.addEventListener('change', function () {
-      render()
-    })
-
-    render()
-
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('./sw.js')
-    }
-  </script>
-</body>
-
+    </style>
+  </head>
+
+  <body>
+    <h1>/* TodoList */<span class="cursor">_</span></h1>
+
+    <div class="select-row">
+      <select id="category-select">
+        <option value="기타">기타</option>
+        <option value="숙제">숙제</option>
+        <option value="공부">공부</option>
+      </select>
+      <input id="deadline-input" type="date">
+    </div>
+
+    <div class="input-row">
+      <input id="todo-input" type="text" maxlength="100" placeholder="너 또 까먹을거지">
+      <button id="add-btn">추가</button>
+    </div>
+
+    <div class="filter-row">
+      <select id="category-filter">
+        <option value="전체">전체</option>
+        <option value="기타">기타</option>
+        <option value="숙제">숙제</option>
+        <option value="공부">공부</option>
+      </select>
+      <select id="completed-filter">
+        <option value="전체">전체</option>
+        <option value="미완료">미완료</option>
+        <option value="완료">완료</option>
+      </select>
+      <select id="date-sort">
+        <option value="default">기본순</option>
+        <option value="asc">날짜 빠른순</option>
+        <option value="desc">날짜 느린순</option>
+      </select>
+    </div>
+
+    <div class="count-row">
+      <span id="todo-count"></span>
+      <span id="count-bar"></span>
+    </div>
+
+    <ul id="todo-list"></ul>
+
+    <script src="index.js"></script>
+  </body>
 </html>
