@@ -1,0 +1,226 @@
+@import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap');
+
+body {
+    font-family: 'Nanum Gothic', '나눔고딕', sans-serif;
+    font-weight: 500;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0;
+    color: #333;
+}
+
+h1 {
+    background: white;
+    color: #333;
+    font-size: 36px;
+    font-weight: 300;
+    margin: 0;
+    padding: 12px 20px 0px;
+    cursor: pointer;
+    letter-spacing: 2px;
+    text-shadow: none;
+    animation: none;
+}
+
+ul { padding: 0; list-style: none; }
+
+.select-row,
+.input-row {
+    display: contents;
+    gap: 8px;
+    padding: 12px 16px;
+    background: white;
+    border: none;
+    border-bottom: none;
+    margin-bottom: 0;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.filter-row {
+    display: flex;
+    gap: 8px;
+    padding: 10px 16px 5px;
+    border: none;
+    margin-bottom: 8px;
+    align-items: center;
+    justify-content: center;
+}
+
+#input-area {
+    display: flex;
+    background: white;
+    border: none;
+    border-bottom: none;
+    align-items: center;
+    padding: 8px 16px;
+    gap: 8px;
+    flex-wrap: wrap;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+#input-area .select-row,
+#input-area .input-row {
+    border: none;
+    padding: 0;
+    background: none;
+    flex: unset;
+    display: contents;
+}
+
+#category-select, #deadline-input,
+#category-filter, #completed-filter, #date-sort {
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    padding: 4px 8px;
+    font-size: 13px;
+    background: white;
+    color: #333;
+    height: 35px;
+    box-sizing: border-box;
+    font-family: inherit;
+}
+
+#todo-input {
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    padding: 4px 8px;
+    font-size: 13px;
+    flex: 1;
+    height: 35px;
+    box-sizing: border-box;
+    color: #333;
+    background: white;
+}
+
+#todo-input:focus { outline: none; border-color: #3c82cc; }
+
+#add-btn {
+    background: #3c82cc;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    padding: 4px 14px;
+    font-size: 13px;
+    height: 35px;
+    box-sizing: border-box;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+#add-btn:hover { background: #2d6faa; }
+
+.boj-table {
+    width: 100%;
+    border: 1px solid #d4d4d4;
+    border-collapse: collapse;
+    margin-top: 0;
+    font-size: 13px;
+    background: white;
+}
+
+.boj-table th {
+    border: 1px solid #d4d4d4;
+    padding: 8px 10px;
+    text-align: left;
+    color: #555;
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+.boj-table td {
+    border: 1px solid #d4d4d4;
+    padding: 10px 12px;
+    vertical-align: middle;
+}
+
+.boj-table td img {
+    vertical-align: middle;
+    position: relative;
+}
+
+.boj-table tbody tr:nth-child(odd) { background: #f0f0f0; }
+.boj-table tbody tr:nth-child(even) { background: white; }
+
+.boj-id-cell { white-space: nowrap; }
+.boj-id { color: #3c82cc; font-size: 12px; cursor: pointer; }
+.boj-id:hover { text-decoration: underline; }
+
+.boj-completed-row .todo-text { color: #009961; font-weight: bold; }
+.todo-text { color: #3c82cc; vertical-align: middle; cursor: pointer; }
+.todo-text:hover { text-decoration: underline; }
+
+.result-ac   { color: #009861; font-weight: bold; white-space: nowrap; }
+.result-tle  { color: #ff4444; white-space: nowrap; }
+.result-ce   { color: #3c82cc; white-space: nowrap; text-decoration: underline;}
+.result-wait { color: #888; white-space: nowrap; }
+
+.boj-lang { color: #3c82cc; font-size: 12px; }
+.boj-lang:hover { text-decoration: underline; cursor: pointer; }
+
+.boj-time { color: #3c82cc; font-size: 12px; }
+.boj-time:hover { text-decoration: underline; cursor: pointer; }
+
+.boj-unit { color: #e74c3c}
+
+.boj-nav {
+    display: flex;
+    background: white;
+    border: none;
+    overflow-x: auto;
+    white-space: nowrap;
+    margin-top: 20px;
+    margin-bottom: 8px;
+}
+
+.boj-nav-item {
+    color: #333;
+    padding: 12px 14px;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.boj-nav-item:hover { background: #f0f0f0; color: #3c82cc; }
+.boj-nav-item.active { background: #3c82cc; color: white; }
+
+.boj-subtitle {
+    text-align: left;
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: #aaa;
+    margin: 0;
+    border-bottom: 1px solid #e0e0e0;
+    padding: 0px 70px 12px;
+}
+
+.edit-btn {
+    background: none;
+    border: none;
+    color: #3c82cc;
+    cursor: pointer;
+    font-size: 12px;
+    padding: 0;
+}
+
+.edit-btn:hover { text-decoration: underline; }
+
+.edit-input {
+    border: 1px solid #3c82cc;
+    border-radius: 3px;
+    padding: 2px 6px;
+    font-size: 13px;
+    width: 90%;
+    outline: none;
+}
+
+.up-btn,
+.down-btn,
+.delete-btn {
+    cursor: pointer;
+}
+
+.flash { box-shadow: 0 0 8px #3c82cc; }
+
+.count-row { display: none; }
+.cursor { display: none; }

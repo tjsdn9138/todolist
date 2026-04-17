@@ -5,6 +5,7 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="UTF-8">
+    <link id="theme-css" rel="stylesheet" href="hacker.css">
     <link rel="manifest" href="manifest.json">
     <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic+Coding&display=swap" rel="stylesheet">
     <meta name="theme-color" content="#0d0d0d">
@@ -13,298 +14,51 @@
                   script-src 'self'; 
                   style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
                   font-src https://fonts.gstatic.com;">
-
-    <style>
-      body {
-        background-color: #0d0d0d;
-        font-family: 'Nanum Gothic Coding', monospace;
-        max-width: 480px;
-        margin: 40px auto;
-        padding: 10px 20px 20px 20px;
-        color: #00ff41;
-      }
-
-      @keyframes glitch {
-        0%, 85%, 100% { text-shadow: 0 0 10px #00ff41; transform: translateX(0); }
-        88% { text-shadow: -3px 0 #ff0000, 3px 0 #0000ff; transform: translateX(-2px); }
-        92% { text-shadow: 3px 0 #ff0000, -3px 0 #0000ff; transform: translateX(2px); }
-        96% { text-shadow: 0 0 10px #00ff41; transform: translateX(0); }
-      }
-
-      h1 {
-        color: #00ff41;
-        text-align: center;
-        text-shadow: 0 0 10px #00ff41;
-        font-size: 48px;
-        margin-top: 10px;
-        margin-bottom: 60px;
-        animation: glitch 4s infinite;
-      }
-
-      ul {
-        padding: 0;
-      }
-
-      #category-select,
-      #deadline-input {
-        background-color: #1a1a1a;
-        color: #00ff41;
-        border: 2px solid #00ff41;
-        padding: 8px 12px;
-        font-size: 14px;
-        border-radius: 8px;
-        height: 38px;
-        box-sizing: border-box;
-      }
-
-      #deadline-input {
-        font-size: 12px;
-        width: 20%;
-      }
-
-      #todo-input {
-        background-color: #1a1a1a;
-        color: #00ff41;
-        border: 2px solid #00ff41;
-        padding: 8px 12px;
-        font-size: 16px;
-        border-radius: 8px;
-        width: auto;
-        flex: 1;
-        box-sizing: border-box;
-        height: 40px;
-      }
-
-      #todo-input:focus {
-        outline: none;
-        box-shadow: 0 0 10px #00ff41;
-      }
-
-      #add-btn {
-        background-color: #00ff41;
-        color: #0d0d0d;
-        padding: 8px 16px;
-        border-radius: 8px;
-        font-size: 16px;
-        font-weight: bold;
-        cursor: pointer;
-        border: 2px solid transparent;
-        box-sizing: border-box;
-        height: 40px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: all 0.2s;
-      }
-
-      #category-filter,
-      #completed-filter,
-      #date-sort {
-        background-color: #1a1a1a;
-        color: #00ff41;
-        border: 2px solid #00ff41;
-        padding: 4px 8px;
-        font-size: 13px;
-        border-radius: 8px;
-        height: 32px;
-        box-sizing: border-box;
-        font-family: 'Nanum Gothic Coding', monospace;
-        cursor: pointer;
-      }
-
-      #todo-count {
-        white-space: nowrap;
-      }
-
-      #count-bar {
-        letter-spacing: -2px;
-      }
-
-      #add-btn:hover {
-        background-color: #0d0d0d;
-        color: #00ff41;
-        border: 2px solid #00ff41;
-      }
-
-      .edit-input {
-        background-color: #0d0d0d;
-        color: #00ff41;
-        border: 1px solid #00ff41;
-        border-radius: 4px;
-        padding: 4px 8px;
-        font-family: 'Nanum Gothic Coding', monospace;
-        font-size: 14px;
-        width: 90%;
-        outline: none;
-        box-shadow: 0 0 8px #00ff41;
-        padding: 4px 0;
-      }
-
-      .todo-item {
-        background: #1a1a1a;
-        color: #00ff41;
-        border: 1px solid #00cc33;
-        padding: 12px;
-        margin: 8px 0;
-        border-radius: 8px;
-        list-style: none;
-        width: 90%;
-        cursor: pointer;
-        word-break: break-all;
-        display: flex;
-        align-items: center;
-      }
-
-      .todo-item:hover {
-        box-shadow: 0 0 10px #00cc33;
-        transition: box-shadow 0.2s;
-      }
-
-      .todo-text {
-        flex: 1;
-      }
-
-      .overdue .todo-text {
-        color: #ff4444;
-      }
-
-      .delete-btn {
-        background-color: transparent;
-        border: none;
-        font-size: 15px;
-        color: #ff4444;
-        cursor: pointer;
-      }
-
-      .up-btn,
-      .down-btn {
-        background-color: transparent;
-        border: 1px solid #00ff41;
-        color: #00ff41;
-        cursor: pointer;
-        padding: 2px 6px;
-        font-size: 12px;
-        border-radius: 4px;
-      }
-
-      .down-btn {
-        margin-right: 8px;
-      }
-
-      .up-btn:hover,
-      .down-btn:hover {
-        background-color: #00ff41;
-        color: #0d0d0d;
-      }
-
-      .completed .todo-text {
-        text-decoration: line-through;
-        color: #1f4f1f;
-      }
-
-      .select-row {
-        display: flex;
-        gap: 8px;
-        margin-bottom: 12px;
-        align-items: center;
-        width: 100%;
-      }
-
-      .input-row {
-        display: flex;
-        gap: 8px;
-        margin-bottom: 25px;
-        align-items: center;
-        width: 100%;
-      }
-
-      .filter-row {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        margin-bottom: 16px;
-      }
-
-      .count-row {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 20px;
-        margin-bottom: 16px;
-        color: #00cc33;
-        font-size: 15px;
-      }
-
-      @keyframes blink {
-        0%, 100% { opacity: 1; }
-        50% { opacity: 0; }
-      }
-
-      .cursor {
-        animation: blink 1s step-end infinite;
-      }
-
-      @keyframes flash {
-        0%, 100% { box-shadow: 0 0 10px #00ff41; transform: translateX(0); }
-        30% { box-shadow: -3px 0 #ff0000, 3px 0 #0000ff; transform: translateX(-2px); }
-        60% { box-shadow: 3px 0 #ff0000, -3px 0 #0000ff; transform: translateX(2px); }
-        90% { box-shadow: 0 0 10px #00ff41; transform: translateX(0); }
-      }
-
-      .flash {
-        animation: flash 0.4s ease;
-      }
-
-      @keyframes glitch-out {
-        0% { opacity: 1; transform: translateX(0); text-shadow: none; }
-        20% { text-shadow: -6px 0 #ff0000, 6px 0 #0000ff; transform: translateX(-2px); }
-        40% { text-shadow: 6px 0 #ff0000, -6px 0 #0000ff; transform: translateX(2px); opacity: 0.7; }
-        60% { text-shadow: -6px 0 #ff0000, 6px 0 #0000ff; transform: translateX(-1px); opacity: 0.4; }
-        80% { text-shadow: 6px 0 #ff0000, -6px 0 #0000ff; transform: translateX(1px); opacity: 0.2; }
-        100% { opacity: 0; transform: translateX(0); }
-      }
-
-      .removing {
-        animation: glitch-out 0.5s ease forwards;
-      }
-
-      @keyframes glitch-complete {
-      0% { opacity: 1; transform: translateX(0); text-shadow: none; }
-      25% { text-shadow: -6px 0 #ff0000, 6px 0 #0000ff; transform: translateX(-2px); }
-      50% { text-shadow: 6px 0 #ff0000, -6px 0 #0000ff; transform: translateX(2px); }
-      75% { text-shadow: -6px 0 #ff0000, 6px 0 #0000ff; transform: translateX(-1px); }
-      100% { opacity: 1; transform: translateX(0); text-shadow: none; }
-    }
-
-    .completing {
-      animation: glitch-complete 0.4s ease forwards;
-    }
-    </style>
   </head>
 
   <body>
-    <h1>/* TodoList */<span class="cursor">_</span></h1>
-
-    <div class="select-row">
-      <select id="category-select">
-        <option value="기타">기타</option>
-        <option value="숙제">숙제</option>
-        <option value="공부">공부</option>
-      </select>
-      <input id="deadline-input" type="date">
+    <h1></h1>
+    <p class="boj-subtitle">RIP BOJ_SWAN</p>
+    
+    <div class="boj-nav">
+      <span class="boj-nav-item">전체</span>
+      <span class="boj-nav-item">제출</span>
+      <span class="boj-nav-item">맞힌 사람</span>
+      <span class="boj-nav-item">숏코딩</span>
+      <span class="boj-nav-item">재채점 결과</span>
+      <span class="boj-nav-item">채점 현황</span>
+      <span class="boj-nav-item active">내 제출</span>
+      <span class="boj-nav-item">난이도 기여</span>
+      <span class="boj-nav-item">질문 게시판 (20)</span>
+      <span class="boj-nav-item">타이머▼</span>
     </div>
 
-    <div class="input-row">
-      <input id="todo-input" type="text" maxlength="100" placeholder="너 또 까먹을거지">
-      <button id="add-btn">추가</button>
+    <div id="input-area"> 
+      <div class="select-row">
+        <select id="category-select">
+          <option value="기타">기타</option>
+          <option value="일퀘">일퀘</option>
+          <option value="과제">과제</option>
+          <option value="공부">공부</option>
+          <option value="개발">개발</option>
+        </select>
+        <input id="deadline-input" type="date">
+      </div>
+
+      <div class="input-row">
+        <input id="todo-input" type="text" maxlength="100" placeholder="너 또 까먹을거지">
+        <button id="add-btn">추가</button>
+      </div>
     </div>
 
     <div class="filter-row">
       <select id="category-filter">
         <option value="전체">전체</option>
         <option value="기타">기타</option>
-        <option value="숙제">숙제</option>
+        <option value="일퀘">일퀘</option>
+        <option value="숙제">과제</option>
         <option value="공부">공부</option>
+        <option value="개발">개발</option>
       </select>
       <select id="completed-filter">
         <option value="전체">전체</option>

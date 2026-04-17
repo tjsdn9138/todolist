@@ -1,8 +1,10 @@
-const CACHE_NAME = 'todolist-v1.3'
+const CACHE_NAME = 'todolist-v2.0'
 const FILES = [
     './',
     './index.html',
     './index.js',
+    './hacker.css',
+    './boj.css',
 ]
 
 self.addEventListener('install', function(e) {
